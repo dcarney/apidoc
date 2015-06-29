@@ -1,0 +1,42 @@
+### {{ .Method }} [{{ .URLTemplate }}]
+
+{{ .Description }}
+
+{{ if .Notes }}
+**NOTE:** {{ .Notes }}
+{{end}}
+{{ if .URLParams }}
+* Parameters
+	{{ range $param := .URLParams }}
+	* {{ $param.Name }} ({{ if $param.Required }}required,{{ end }} {{ $param.Type }}) : {{ $param.Description }}
+	{{ end }}
+{{ end }}
+
+{{ if .DataParams }}
+* Request Body Parameters
+	{{ range $param := .DataParams }}
+	* {{ $param.Name }} ({{ if $param.Required }}required,{{ end }} {{ $param.Type }}) : {{ $param.Description }}
+	{{ end }}
+{{ end }}
+
+**Example success response**
+
+`{{ .SuccessResponse.Code }}`: {{ statusText .SuccessResponse.Code }}
+
+		{{ .SuccessResponse.Content }}
+
+{{ if .ErrorResponses }}
+**Example error responses**
+  {{ range $resp := .ErrorResponses }}
+  `{{ $resp.Code }}`: {{ statusText $resp.Code }}
+
+    {{ $resp.Content }}
+  {{ end }}
+{{ end }}
+
+{{ if .ExampleCalls }}
+**Example calls**
+  {{ range $call := .ExampleCalls }}
+    {{ $call }}
+	{{ end }}
+{{ end }}
