@@ -1,4 +1,4 @@
-package boilerdoc
+package main
 
 import (
 	"io"
@@ -6,13 +6,22 @@ import (
 	"text/template"
 )
 
-// Render writes a Markdown representation of the specified Endpoint to an
-// io.Writer using the supplied templateFile.
-func Render(e Endpoint, out io.Writer, templateFile string) error {
-	funcs := template.FuncMap{
+// RenderMarkdown writes a Markdown representation of the specified Endpoint to
+// an io.Writer
+func RenderMarkdown(e *Endpoint, out io.Writer) error {
+	fm := template.FuncMap{
 		"statusText": http.StatusText,
 	}
+	t := template.Must(template.New("markdown").Funcs(fm).Parse(markdownTemplate))
+	return t.Execute(out, e)
+}
 
-	t := template.Must(template.New("endpoint.template").Funcs(funcs).ParseFiles(templateFile))
+// RenderHtml writes a Markdown representation of the specified Endpoint to
+// an io.Writer
+func RenderHtml(e *Endpoint, out io.Writer) error {
+	fm := template.FuncMap{
+		"statusText": http.StatusText,
+	}
+	t := template.Must(template.New("html").Funcs(fm).Parse(htmlTemplate))
 	return t.Execute(out, e)
 }
