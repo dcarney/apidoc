@@ -112,10 +112,10 @@ func parseKeyword(e *Endpoint, kw string, lines []string) error {
 			e.URLTemplate = matches[2]
 		}
 	case KWDescription:
-		lines = stripKeyword("Description", lines)
+		lines = stripKeyword(KWDescription, lines)
 		e.Description = strings.Join(lines, "\n")
 	case KWParameter:
-		lines = stripKeyword("Parameter", lines)
+		lines = stripKeyword(KWParameter, lines)
 		matches := parameterRx.FindStringSubmatch(lines[0])
 		if len(matches) > 0 {
 			p := Parameter{
@@ -129,7 +129,7 @@ func parseKeyword(e *Endpoint, kw string, lines []string) error {
 		}
 
 	case KWSuccessResponse:
-		lines = stripKeyword("Success Response", lines)
+		lines = stripKeyword(KWSuccessResponse, lines)
 		code, err := strconv.Atoi(lines[0])
 		if err != nil {
 			return err
@@ -139,7 +139,7 @@ func parseKeyword(e *Endpoint, kw string, lines []string) error {
 			Content: strings.Join(lines[1:], "\n"),
 		}
 	case KWErrorResponse:
-		lines = stripKeyword("Error Response", lines)
+		lines = stripKeyword(KWErrorResponse, lines)
 		code, err := strconv.Atoi(lines[0])
 		if err != nil {
 			return err
@@ -150,8 +150,11 @@ func parseKeyword(e *Endpoint, kw string, lines []string) error {
 		}
 		e.ErrorResponses = append(e.ErrorResponses, er)
 	case KWExample:
-		lines = stripKeyword("Example", lines)
+		lines = stripKeyword(KWExample, lines)
 		e.Examples = append(e.Examples, strings.Join(lines, "\n"))
+	case KWNotes:
+		lines = stripKeyword(KWNotes, lines)
+		e.Notes = strings.Join(lines, "\n")
 	default:
 		return fmt.Errorf("Unknown keyword: %s", kw)
 	}
