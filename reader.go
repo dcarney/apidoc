@@ -56,7 +56,8 @@ var (
 	//    foobar, string
 	//    foobar, required, string
 	//    foobar, required
-	parameterRx = regexp.MustCompile(`^^([\w-]+)(?:\s*,\s*(required))?(?:\s*,\s*(\w+))?`)
+	//    foobar, required, array of strings
+	parameterRx = regexp.MustCompile(`^([\w-]+)(?:\s*,\s*(required))?(?:\s*,\s*([\w\s]+))?$`)
 )
 
 // TODO: change this to a regexp?
